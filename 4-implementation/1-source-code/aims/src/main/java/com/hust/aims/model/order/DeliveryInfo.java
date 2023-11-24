@@ -5,7 +5,7 @@ public class DeliveryInfo {
     private String name;
     private String city;
     private String address;
-    private String phoneNumber;
+    private String phone;
     private String shippingInstruction;
     private boolean rushOrder;
 
@@ -14,7 +14,7 @@ public class DeliveryInfo {
         this.name = name;
         this.city = city;
         this.address = address;
-        this.phoneNumber = phoneNumber;
+        this.phone = phoneNumber;
         this.shippingInstruction = shippingInstruction;
         this.rushOrder = rushOrder;
     }
@@ -55,12 +55,12 @@ public class DeliveryInfo {
         this.address = address;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getShippingInstruction() {

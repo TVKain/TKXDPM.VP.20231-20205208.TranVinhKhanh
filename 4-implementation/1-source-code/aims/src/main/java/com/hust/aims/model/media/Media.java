@@ -108,4 +108,9 @@ public class Media {
         Media media = (Media) o;
         return Objects.equals(id, media.id);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

@@ -3,35 +3,38 @@ package com.hust.aims.controller;
 import com.hust.aims.model.Cart;
 import com.hust.aims.model.media.Media;
 import com.hust.aims.model.order.DeliveryInfo;
-import com.hust.aims.model.order.Invoice;
 import com.hust.aims.model.order.Order;
-import com.hust.aims.util.RegexUtil;
-import javafx.fxml.FXML;
+import com.hust.aims.subsystem.banking.Banking;
+import com.hust.aims.subsystem.banking.vnpay.VNPaySubsystem;
 
 import java.util.List;
+import java.util.Map;
 
 public class PlaceOrderController {
     private final Order order = new Order();
-
+    private final DeliveryInfo deliveryInfo = new DeliveryInfo();
     public Order getOrder() {
         return order;
     }
 
-    @FXML
-    public void initialize() {
-
+    public void initializeDeliveryInfo(String name, String phone, String city, String address, String shipping, boolean rushOrder) {
+        deliveryInfo.setName(name);
+        deliveryInfo.setPhone(phone);
+        deliveryInfo.setCity(city);
+        deliveryInfo.setAddress(address);
+        deliveryInfo.setShippingInstruction(shipping == null ? "" : shipping);
+        deliveryInfo.setRushOrder(rushOrder);
     }
 
-    public void initializeOrder(DeliveryInfo deliveryInfo) {
-        order.setDeliveryInfo(deliveryInfo);
-
+    public void initializeOrder() {
+        order.setDeliveryInfo(this.deliveryInfo);
         order.getInvoice().setShippingFee(calculateShippingFee());
         order.getInvoice().setMediaFee(Cart.getCart().getTotal());
-        order.getInvoice().setVat(10.0);
+        order.getInvoice().setVat(Cart.VAT);
         order.getInvoice().calculateTotal();
     }
+
     /**
-     *
      * @return the shipping fee for the current cart
      */
     public Double calculateShippingFee() {
@@ -41,13 +44,14 @@ public class PlaceOrderController {
             return 0.0;
         }
 
-        Double shippingFee;
+        double shippingFee;
 
-        Media heaviestMedia = Cart.getCart().getHeaviestMedia();
-        Double weight = heaviestMedia.getWeight() * heaviestMedia.getQuantity();
-        Double remainWeight;
+        Map.Entry<Media, Integer> heaviestMedia = Cart.getCart().getHeaviestMedia();
 
-        final List<String> discountCities = List.of(new String[]{"hà nội", "tp. hcm"});
+        double weight = heaviestMedia.getKey().getWeight() * heaviestMedia.getValue();
+        double remainWeight;
+
+        final List<String> discountCities = List.of(new String[]{"ha noi", "tp. hcm"});
         if (discountCities.contains(order.getDeliveryInfo().getCity())) {
             shippingFee = 22000.0;
             remainWeight = weight - 3;
@@ -57,16 +61,16 @@ public class PlaceOrderController {
         }
         shippingFee += 5000 * remainWeight;
 
-        if (order.getDeliveryInfo().isRushOrder()) {
-            shippingFee += 10000 * Cart.getCart().getRushOrderSupportedNumber();
-        }
-
-        System.out.println(shippingFee);
-
         return shippingFee;
     }
 
-    public boolean validatePhoneNumber(String phoneNumber) {
+    public void redirectToPayment() {
+        Banking vnpay = new VNPaySubsystem();
+
+        vnpay.processTransaction(order);
+    }
+
+    public boolean validatePhone(String phoneNumber) {
         if (phoneNumber == null) {
             return false;
         }
@@ -75,7 +79,6 @@ public class PlaceOrderController {
 
         return phoneNumber.matches("^[0-9]{10}$");
     }
-
     public boolean validateName(String name) {
         if (name == null) {
             return false;
@@ -83,9 +86,8 @@ public class PlaceOrderController {
 
         name = name.trim();
 
-        return name.matches("^[a-zA-Z " + RegexUtil.vietnamRegex + "]{1,64}$" );
+        return name.matches("^[a-zA-Z ]{1,64}$" );
     }
-
     public boolean validateAddress(String address) {
         if (address == null) {
             return false;
@@ -93,6 +95,6 @@ public class PlaceOrderController {
 
         address = address.trim();
 
-        return address.matches("^[a-zA-Z0-9, " + RegexUtil.vietnamRegex + "]{4,128}$");
+        return address.matches("^[a-zA-Z0-9, ]{4,128}$");
     }
 }
