@@ -1,7 +1,9 @@
 package com.hust.aims.controller;
 
 import com.hust.aims.model.Cart;
+import com.hust.aims.model.CartTest;
 import com.hust.aims.model.media.Media;
+import com.hust.aims.model.order.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -9,7 +11,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlaceRushOrderControllerTest {
-    private final PlaceRushOrderController placeRushOrderController = new PlaceRushOrderController();;
+    private final PlaceRushOrderController placeRushOrderController = new PlaceRushOrderController(new Order());;
 
     @Test
     public void validateRushOrderMediaSupportTest() {
@@ -21,13 +23,13 @@ public class PlaceRushOrderControllerTest {
         Media media4 = new Media(4, 25., 120, "Game D", "Adventure", "An immersive adventure game", 40,1., false);
         Media media5 = new Media(5, 12., 60, "Magazine E", "Lifestyle", "A trendy lifestyle magazine", 75, 2.,false);
 
-        Cart.getCart().addMedia(media1);
-        Cart.getCart().addMedia(media2);
-        Cart.getCart().addMedia(media3);
-        Cart.getCart().addMedia(media4);
-        Cart.getCart().addMedia(media5);
+        Cart.getCart().add(media1, 4);
+        Cart.getCart().add(media2, 5);
+        Cart.getCart().add(media3, 6);
+        Cart.getCart().add(media4, 8);
+        Cart.getCart().add(media5, 4);
 
-        assertTrue(placeRushOrderController.validateRushOrderMediaSupport(Cart.getCart()));
+        assertTrue(placeRushOrderController.validateRushOrderMediaSupport());
 
         Cart.getCart().empty();
 
@@ -38,21 +40,22 @@ public class PlaceRushOrderControllerTest {
         Media media10 = new Media(5, 12., 60, "Magazine E", "Lifestyle", "A trendy lifestyle magazine", 75, 2.,false);
 
 
-        Cart.getCart().addMedia(media6);
-        Cart.getCart().addMedia(media7);
-        Cart.getCart().addMedia(media8);
-        Cart.getCart().addMedia(media9);
-        Cart.getCart().addMedia(media10);
+        Cart.getCart().add(media6, 1);
+        Cart.getCart().add(media7, 1);
+        Cart.getCart().add(media8, 1);
+        Cart.getCart().add(media9, 1);
+        Cart.getCart().add(media10, 1);
 
-        assertFalse(placeRushOrderController.validateRushOrderMediaSupport(Cart.getCart()));
+        assertFalse(placeRushOrderController.validateRushOrderMediaSupport());
     }
+
 
     @ParameterizedTest
     @CsvSource({
-            "'Hà Nội', true",
-            "'hà nội', true",
+            "'Ha Noi', true",
+            "'ha noi', true",
             "'TP. HCM', false",
-            "'Bắc Ninh';, false"
+            "'Bac Ninh';, false"
     })
     public void validateRushOrderAddressTest(String address, boolean expected) {
         boolean isValid = placeRushOrderController.validateRushOrderAddress(address);

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
@@ -42,75 +43,90 @@
       </HBox>
    </top>
    <center>
-      <VBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" spacing="96.0" BorderPane.alignment="CENTER">
          <children>
-            <GridPane alignment="CENTER" hgap="8.0" vgap="8.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES" />
-              </rowConstraints>
+            <HBox>
                <children>
-                  <Label text="Name">
+                  <Button fx:id="backButton" mnemonicParsing="false" text="Back">
                      <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font size="16.0" />
                      </font>
-                  </Label>
-                  <Label text="Phone" GridPane.rowIndex="1">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                  </Label>
-                  <Label text="Province/City" GridPane.rowIndex="2">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                  </Label>
-                  <TextField GridPane.columnIndex="1" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <ComboBox maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label text="Shipping Instructions" GridPane.rowIndex="4">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                  </Label>
-                  <Label text="Address" GridPane.rowIndex="3">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                  </Label>
-                  <TextField maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <TextArea maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <CheckBox maxHeight="1.7976931348623157E308" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <Label text="Rush Order" GridPane.rowIndex="5">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="138.0" layoutY="250.0" text="Rush Order Address" GridPane.rowIndex="6">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                  </Label>
-                  <TextField layoutX="307.0" layoutY="43.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
                </children>
                <padding>
-                  <Insets left="128.0" right="128.0" />
+                  <Insets left="16.0" top="16.0" />
                </padding>
-            </GridPane>
-            <Button alignment="CENTER" maxHeight="1.7976931348623157E308" mnemonicParsing="false" text="Confirm delivery">
-               <font>
-                  <Font name="System Bold" size="16.0" />
-               </font>
-            </Button>
+            </HBox>
+            <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="16.0">
+               <children>
+                  <GridPane fx:id="gridPane" alignment="CENTER" hgap="8.0" vgap="8.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Name">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label text="Phone" GridPane.rowIndex="1">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label text="Province/City" GridPane.rowIndex="2">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="nameTextField" GridPane.columnIndex="1" />
+                        <TextField fx:id="phoneTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label text="Shipping Instructions" GridPane.rowIndex="4">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label text="Address" GridPane.rowIndex="3">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="addressTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextArea fx:id="shippingInstructionTextArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <CheckBox fx:id="rushOrderCheckBox" maxHeight="1.7976931348623157E308" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Label text="Rush Order" GridPane.rowIndex="5">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="cityComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                     </children>
+                     <padding>
+                        <Insets left="128.0" right="128.0" />
+                     </padding>
+                  </GridPane>
+                  <Button fx:id="confirmDeliveryButton" alignment="CENTER" maxHeight="1.7976931348623157E308" mnemonicParsing="false" text="Confirm delivery">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+            </VBox>
          </children>
       </VBox>
    </center>

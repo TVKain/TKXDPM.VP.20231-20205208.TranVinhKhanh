@@ -1,6 +1,7 @@
-package com.hust.aims;
+package com.hust.aims.util;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 import java.io.IOException;
@@ -29,7 +30,7 @@ public class ScreenSwitcher {
         screenMap.put(key, parent);
     }
 
-    public static void removeScreen(String key) {
+    public static void  removeScreen(String key) {
         screenMap.remove(key);
     }
 
@@ -37,6 +38,22 @@ public class ScreenSwitcher {
         String parent = screenMap.get(key);
         FXMLLoader fxmlLoader = new FXMLLoader(ScreenSwitcher.class.getResource(parent));
         fxmlLoader.setController(controller);
+        try {
+            mainScene.setRoot(fxmlLoader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Set the current screen with parent
+    public static void setScreen(Parent screen) {
+        mainScene.setRoot(screen);
+    }
+
+    public static void setScreen(String key) {
+        String parent = screenMap.get(key);
+        FXMLLoader fxmlLoader = new FXMLLoader(ScreenSwitcher.class.getResource(parent));
+
         try {
             mainScene.setRoot(fxmlLoader.load());
         } catch (IOException e) {

@@ -1,9 +1,11 @@
 package com.hust.aims.model;
 
 import com.hust.aims.model.media.Media;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -11,77 +13,83 @@ import java.util.List;
  * @author TVKain
  */
 public class Cart {
-    private static Cart cart = null;
-    private final List<Media> mediaList;
-
-    private Double total = 0.0;
-
+    public static final double VAT = 10;
+    private static final Cart cart = new Cart();
+    private final ObservableMap<Media, Integer> mediaMap;
     private Cart() {
-        this.mediaList = new ArrayList<Media>();
+        this.mediaMap = FXCollections.observableHashMap();
+    }
+    public ObservableMap<Media, Integer> getMediaMap() {
+        return mediaMap;
+    }
+    public static Cart getCart() {
+        return cart;
+    }
+    public void add(Media media, Integer quantity) {
+        if (mediaMap.containsKey(media)) {
+            mediaMap.put(media, mediaMap.get(media) + quantity);
+        } else {
+            mediaMap.put(media, quantity);
+        }
     }
 
-    public static Cart getCart() {
-        if (cart == null) {
-            cart = new Cart();
-        }
-        return cart;
+    public void remove(Media media) {
+        mediaMap.remove(media);
     }
 
     public Double getTotal() {
+        double total = 0.0;
+        for (Map.Entry<Media, Integer> entry : mediaMap.entrySet()) {
+            total += entry.getKey().getPrice() * entry.getValue();
+        }
         return total;
     }
 
-    public void setTotal(Double total) {
-        this.total = total;
-    }
+    public Integer getSize() {
+        int size = 0;
 
-    public List<Media> getMediaList() {
-        return this.mediaList;
-    }
+        for (Integer value : mediaMap.values()) {
+            size += value;
+        }
 
-    public void addMedia(Media media) {
-        this.mediaList.add(media);
-        total += media.getPrice() * media.getQuantity();
-    }
-
-    public void removeMedia(Media media) {
-        this.mediaList.remove(media);
-        total -= media.getPrice() * media.getQuantity();
+        return size;
     }
 
     public void empty() {
-        mediaList.clear();
-        total = 0.0;
+        mediaMap.clear();
     }
 
-    public Integer getMediaNumber() {
-        return mediaList.size();
+    public HashMap<Media, Integer> getRushOrderSupportMedias() {
+        HashMap<Media, Integer> rushOrderSupportMedias = new HashMap<>();
+        for (Map.Entry<Media, Integer> entry : mediaMap.entrySet()) {
+            if (entry.getKey().getSupportRushOrder()) {
+                rushOrderSupportMedias.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return rushOrderSupportMedias;
     }
 
-    public boolean isInCart(Media media) {
-        return mediaList.contains(media);
+    public boolean hasEnoughStock() {
+        for (Map.Entry<Media, Integer> entry : mediaMap.entrySet()) {
+            if (entry.getValue() > entry.getKey().getQuantity()) {
+                return false;
+            }
+        }
+        retuflrn true;
     }
 
-    public Media getHeaviestMedia() {
-        Media heaviestMedia = mediaList.get(0);
+    public Map.Entry<Media, Integer> getHeaviestMedia() {
+        double heaviest = 0.;
 
-        for (int i = 1; i < mediaList.size(); ++i) {
-            Media currentMedia = mediaList.get(i);
-            if (heaviestMedia.getWeight() * heaviestMedia.getQuantity() < currentMedia.getWeight() * currentMedia.getQuantity()) {
-                heaviestMedia = mediaList.get(i);
+        Map.Entry<Media, Integer> heaviesMedia = null;
+        for (Map.Entry<Media, Integer> entry : mediaMap.entrySet()) {
+            double weight = entry.getKey().getWeight() * entry.getValue();
+            if (weight > heaviest) {
+                weight = heaviest;
+                heaviesMedia = entry;
             }
         }
 
-        return heaviestMedia;
-    }
-
-    public Integer getRushOrderSupportedNumber() {
-        int count = 0;
-        for (Media media : mediaList) {
-            if (media.getSupportRushOrder()) {
-                count += 1;
-            }
-        }
-        return count;
+        return heaviesMedia;
     }
 }
